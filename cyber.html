@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TD MASTER - FULL GAME</title>
+    <style>
+        :root { --neon: #00f2ff; --red: #ff3131; --lime: #39ff14; }
+        body { margin:0; padding:0; overflow:hidden; background:#02050a; color:#fff; font-family:sans-serif; user-select:none; touch-action:none; }
+        
+        /* หน้าจอโหลด */
+        #start-screen { position:fixed; inset:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2000; }
+        .btn-start { padding:20px 50px; font-size:22px; background:var(--neon); border:none; border-radius:50px; font-weight:bold; box-shadow:0 0 30px var(--neon); cursor:pointer; }
+
+        /* UI เกม */
+        #ui { position:fixed; top:10px; left:50%; transform:translateX(-50%); width:90%; background:rgba(0,0,0,0.8); border:2px solid var(--neon); border-radius:15px; padding:10px; display:flex; justify-content:space-around; z-index:100; font-weight:bold; }
+        #controls { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:90%; display:flex; gap:10px; z-index:100; }
+        .tower-btn { flex:1; padding:10px; background:rgba(0,0,0,0.7); border:2px solid var(--neon); color:var(--neon); border-radius:10px; font-size:12px; font-weight:bold; }
+        .tower-btn.active { background:var(--neon); color:#000; }
+
+        canvas { display:block; background:#050a14; }
+        #fix-audio { position:fixed; bottom:80px; right:10px; font-size:10px; background:none; border:1px solid #333; color:#333; padding:5px; border-radius:50%; }
+    </style>
+</head>
+<body>
+
+<div id="start-screen">
+    <h1 style="color:var(--neon); text-shadow:0 0 20px var(--neon);">READY TO BALL?</h1>
+    <button class="btn-start" onclick="startGame()">START MISSION</button>
+</div>
+
+<div id="ui">
+    <div>💰 <span id="gold">200</span></div>
+    <div>❤️ <span id="hp">20</span></div>
+    <div>🌊 <span id="wave">1</span></div>
+</div>
+
+<div id="controls">
+    <button class="tower-btn active" id="btn-basic" onclick="selectTower('basic')">BASIC (50)</button>
+    <button class="tower-btn" id="btn-fast" onclick="selectTower('fast')">FAST (80)</button>
+    <button class="tower-btn" id="btn-heavy" onclick="selectTower('heavy')">HEAVY (120)</button>
+</div>
+
+<button id="fix-audio" onclick="bgMusic.play()">FIX</button>
+<canvas id="gameCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let gold=200, hp=20, wave=1, selected='basic', isGameOver=false;
+    let enemies=[], towers=[], bullets=[];
+
+    // --- AUDIO SYSTEM ---
+    const bgMusic = new Audio('baller.mp3');
+    bgMusic.loop = true;
+    bgMusic.onerror = () => bgMusic.src = 'https://files.catbox.moe/978m8i.mp3';
+
+    function startGame() {
+        document.getElementById('start-screen').style.display = 'none';
+        bgMusic.play().catch(() => console.log("Play blocked"));
+        spawnWave();
+        gameLoop();
+    }
+
+    const towerTypes = {
+        basic: { cost:50, range:150, damage:5, cooldown:30, color:'#00f2ff' },
+        fast:  { cost:80, range:120, damage:2, cooldown:10, color:'#39ff14' },
+        heavy: { cost:120, range:200, damage:25, cooldown:80, color:'#ff9d00' }
+    };
+
+    function selectTower(type) {
+        selected = type;
+        document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-'+type).classList.add('active');
+    }
+
+    // วางป้อม (รองรับมือถือ)
+    canvas.addEventListener('touchstart', (e) => {
+        if(isGameOver) return;
+        const touch = e.touches[0];
+        placeTower(touch.clientX, touch.clientY);
+    });
+
+    function placeTower(x, y) {
+        let type = towerTypes[selected];
+        if (gold >= type.cost) {
+            gold -= type.cost;
+            towers.push({ x, y, type: selected, cooldown: 0 });
+            updateUI();
+        }
+    }
+
+    function updateUI() {
+        document.getElementById('gold').innerText = gold;
+        document.getElementById('hp').innerText = hp;
+        document.getElementById('wave').innerText = wave;
+    }
+
+    function spawnWave() {
+        if(isGameOver) return;
+        let count = 5 + wave;
+        let spawned = 0;
+        let interval = setInterval(() => {
+            if(spawned >= count) { 
+                clearInterval(interval); 
+                setTimeout(() => { wave++; updateUI(); spawnWave(); }, 5000); 
+                return; 
+            }
+            enemies.push({
+                x: -30, y: canvas.height/2,
+                hp: 10 + (wave * 5), maxHp: 10 + (wave * 5),
+                speed: 1 + (wave * 0.1)
+            });
+            spawned++;
+        }, 1000);
+    }
+
+    function gameLoop() {
+        if(isGameOver) return;
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+
+        // วาดถนน
+        ctx.fillStyle = 'rgba(255,255,255,0.05)';
+        ctx.fillRect(0, canvas.height/2 - 40, canvas.width, 80);
+
+        // อัปเดตศัตรู
+        enemies.forEach((en, i) => {
+            en.x += en.speed;
+            ctx.fillStyle = 'red';
+            ctx.beginPath(); ctx.arc(en.x, en.y, 15, 0, Math.PI*2); ctx.fill();
+            // HP Bar
+            ctx.fillStyle = '#333'; ctx.fillRect(en.x-15, en.y-25, 30, 4);
+            ctx.fillStyle = '#39ff14'; ctx.fillRect(en.x-15, en.y-25, (en.hp/en.maxHp)*30, 4);
+
+            if(en.x > canvas.width) { hp--; enemies.splice(i, 1); updateUI(); }
+            if(hp <= 0) { isGameOver=true; alert("GAME OVER!"); location.reload(); }
+        });
+
+        // อัปเดตป้อม
+        towers.forEach(t => {
+            let type = towerTypes[t.type];
+            ctx.fillStyle = type.color;
+            ctx.fillRect(t.x-20, t.y-20, 40, 40);
+            
+            if(t.cooldown > 0) t.cooldown--;
+            else {
+                let target = enemies.find(en => Math.hypot(en.x-t.x, en.y-t.y) < type.range);
+                if(target) {
+                    bullets.push({ x:t.x, y:t.y, target, damage:type.damage, speed:7 });
+                    t.cooldown = type.cooldown;
+                }
+            }
+        });
+
+        // อัปเดตกระสุน
+        bullets.forEach((b, i) => {
+            let dx = b.target.x - b.x, dy = b.target.y - b.y;
+            let dist = Math.hypot(dx, dy);
+            if(dist < 10) {
+                b.target.hp -= b.damage;
+                if(b.target.hp <= 0) {
+                    let idx = enemies.indexOf(b.target);
+                    if(idx > -1) { enemies.splice(idx, 1); gold += 10; updateUI(); }
+                }
+                bullets.splice(i, 1);
+            } else {
+                b.x += (dx/dist) * b.speed; b.y += (dy/dist) * b.speed;
+                ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(b.x, b.y, 4, 0, Math.PI*2); ctx.fill();
+            }
+        });
+
+        requestAnimationFrame(gameLoop);
+    }
+</script>
+</body>
+</html>
