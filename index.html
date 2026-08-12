@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#08090b">
+<title>DARADIFF — NEVERLOST</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;min-height:100%;background:transparent;color:#fff;font-family:Kanit,sans-serif}
+body{overflow-x:hidden;position:relative}
+.bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#08090b}
+.bg-image{position:absolute;inset:-1.5%;width:103%;height:103%;background-image:var(--bg-image);background-position:var(--bg-position,center center);background-size:cover;background-repeat:no-repeat;transform:translateZ(0);filter:blur(var(--bg-blur,0px));will-change:auto}
+.bg-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,6,8,var(--dark-top,.68)),rgba(5,6,8,var(--dark-bottom,.84)))}
+.bg-vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 25%,transparent 0,rgba(0,0,0,.08) 45%,rgba(0,0,0,.36) 100%)}
+.snow{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.42;background-image:radial-gradient(1.2px 1.2px at 15% 20%,#fff,transparent),radial-gradient(1px 1px at 55% 45%,#fff,transparent),radial-gradient(1.2px 1.2px at 82% 70%,#fff,transparent);background-size:260px 260px,220px 220px,300px 300px;animation:snow 24s linear infinite}
+@keyframes snow{to{background-position:0 260px,0 220px,0 300px}}
+.wrap{position:relative;z-index:2;width:min(100% - 28px,720px);margin:auto;padding:22px 0 110px}
+.top{display:flex;align-items:center;justify-content:center;margin:3px 0 22px}
+.logo{font:700 30px Orbitron,sans-serif;letter-spacing:4px;text-shadow:0 0 10px #fff3}
+.tag{font:500 9px Orbitron,sans-serif;letter-spacing:4px;color:#aaa;margin-top:2px;text-align:center}
+.hero{border:1px solid #ffffff12;background:#111318e8;border-radius:16px;padding:16px;text-align:center;margin-bottom:24px}
+.hero .crown{font-size:28px;margin-bottom:3px}
+.hero h1{font:700 20px Orbitron,sans-serif;line-height:1.2;margin:0}
+.hero p{font:500 12px Orbitron,sans-serif;letter-spacing:2px;color:#ddd;margin:5px 0 0}
+.hero-logo{display:none;width:min(88%,360px);max-height:150px;object-fit:contain;object-position:center;margin:2px auto 4px}
+.hero.logo-mode .hero-logo{display:block}
+.hero.logo-mode .hero-title,.hero.logo-mode .hero-subtitle{display:none}
+.tabs{display:flex;width:max-content;margin:0 auto 24px;border:1px solid #ffffff18;background:#0d0f14e8;border-radius:30px;padding:4px}
+.tab{border:0;background:transparent;color:#92949b;border-radius:24px;padding:9px 25px;font:500 12px Orbitron,sans-serif}
+.tab.active{background:#fff;color:#111;box-shadow:0 4px 12px #fff2}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.home-section{margin-bottom:24px}.contact-grid{display:flex;flex-direction:column;gap:10px}.contact-link{display:flex;align-items:center;justify-content:center;width:min(78%,420px);min-height:52px;padding:10px;border:1px solid #ffffff16;background:#111318dd;border-radius:14px;color:#fff;text-decoration:none;font:500 11px Orbitron,sans-serif;text-align:center;transition:transform .16s ease,filter .16s ease}.contact-link.contact-left{align-self:flex-start}.contact-link.contact-center{align-self:center}.contact-link.contact-right{align-self:flex-end}.contact-link:active{transform:scale(.97);filter:brightness(1.15)}.sup-title{font:600 14px Orbitron,sans-serif;text-align:center;margin:0 0 10px;color:#fff}
+.card{min-height:128px;border:1px solid #ffffff16;background:#111318dd;border-radius:14px;padding:16px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.trophy{font-size:28px;margin-bottom:8px}
+.name{font:600 13px Orbitron,sans-serif;word-break:break-word}
+.role{font-size:10px;color:#999;margin-top:4px}
+.members-icon{width:21px;height:21px;display:block;fill:currentColor;flex:0 0 auto}.tab{display:inline-flex;align-items:center;justify-content:center;gap:7px}.fb{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#1680ef;margin-top:10px;text-decoration:none;overflow:hidden;transition:transform .16s ease,filter .16s ease,box-shadow .16s ease}.fb:active{transform:scale(.88);filter:brightness(1.15);box-shadow:0 0 0 6px #1680ef22}.fb svg{width:17px;height:17px;display:block;fill:#fff}.clickable{position:relative;overflow:hidden}.ripple{position:absolute;border-radius:50%;transform:scale(0);background:#ffffff55;animation:ripple .5s ease-out;pointer-events:none}.clickable:active{transform:scale(.97)}@keyframes ripple{to{transform:scale(3);opacity:0}}
+.music{position:fixed;left:18px;bottom:18px;background:#111318f2;border:1px solid #ffffff18;border-radius:18px;padding:10px 13px;display:flex;align-items:center;gap:10px;z-index:10}
+.play{width:34px;height:34px;border-radius:50%;border:0;background:#fff;color:#111;font-size:15px}
+.music small{display:block;color:#aaa;font-size:9px}
+.range{width:70px;accent-color:#fff}
+.request-entry{position:fixed;right:14px;top:14px;z-index:20;border:1px solid #ffffff20;background:#111318eF;color:#fff;border-radius:18px;padding:10px 14px;font:600 10px Orbitron,sans-serif;box-shadow:0 8px 22px #0005;backdrop-filter:blur(8px);cursor:pointer;transition:transform .16s ease,filter .16s ease}.request-entry:active{transform:scale(.95);filter:brightness(1.15)}.request-badge{display:inline-grid;place-items:center;min-width:17px;height:17px;padding:0 4px;margin-left:5px;border-radius:99px;background:#fff;color:#111;font:700 9px Kanit,sans-serif}.role-picks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 6px}.role-pick{border:1px solid #ffffff14;background:#191c23;color:#aaa;border-radius:10px;padding:11px 8px;font:500 11px Kanit,sans-serif;text-align:center;cursor:pointer;transition:.16s ease}.role-pick.active{background:#fff;color:#111;border-color:#fff;box-shadow:0 4px 14px #fff2}.request-note{font-size:9px;color:#777;line-height:1.45;margin:5px 0 9px}.request-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.approve{background:#fff;color:#111}.pending-role{font-size:9px;color:#bbb}.request-empty{font-size:10px;color:#777;padding:10px 0}.request-status{font-size:9px;color:#999;margin-top:2px}@media(max-width:520px){.request-entry{top:10px;right:10px;padding:9px 11px;font-size:9px}.role-picks{grid-template-columns:1fr 1fr}}.bottom-admin{position:fixed;right:18px;bottom:20px;z-index:10;border:1px solid #ffffff18;background:#111318f2;color:#fff;border-radius:18px;padding:10px 15px;font:500 10px Orbitron,sans-serif}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.show{display:flex}
+.panel{width:min(100%,620px);max-height:88vh;overflow:auto;background:#111318;border:1px solid #ffffff16;border-radius:16px;padding:20px;box-shadow:0 18px 50px #000}
+.panel h2{margin:0 0 15px;font-size:17px}
+.input{width:100%;background:#1a1d24;border:1px solid #ffffff0d;color:#fff;border-radius:8px;padding:11px 12px;margin:6px 0;outline:none;font-family:inherit}
+.btn{border:0;border-radius:8px;padding:10px 13px;font-family:inherit;font-weight:500;cursor:pointer}
+.primary{background:#fff;color:#111;width:100%;margin-top:6px}
+.danger{background:#e54e4e;color:#fff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.list{margin-top:14px;display:grid;gap:7px}
+.item{display:flex;align-items:center;gap:7px;background:#191c23;padding:8px;border-radius:8px}
+.item-info{flex:1;min-width:0}.item-info b{font-size:12px}.item-info span{display:block;color:#888;font-size:9px}
+.icon{border:0;background:#252a34;color:#fff;border-radius:6px;width:30px;height:30px}
+.close{float:right;background:none;border:0;color:#888;font-size:18px}
+.filebox{background:#191c23;border:1px solid #ffffff0d;border-radius:9px;padding:12px;margin:8px 0}
+.filebox input{width:100%;color:#bbb;font-size:11px}
+.preview{width:100%;height:110px;object-fit:cover;border-radius:8px;margin-top:8px;display:none}
+.reset{background:#252a34;color:#fff;width:100%;margin-top:7px}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setting label{font-size:10px;color:#aaa;display:block;margin-bottom:4px}
+.setting input[type=range],.setting select{width:100%}
+.hint{font-size:9px;color:#777;line-height:1.5;margin-top:7px}
+@media(max-width:520px){
+.bg-image{background-position:50% 48%}
+.wrap{width:calc(100% - 20px);padding-top:16px}
+.logo{font-size:25px}.grid{grid-template-columns:repeat(3,1fr);gap:8px}
+.card{min-height:120px;padding:12px 6px}.name{font-size:10px}
+.hero h1{font-size:18px}.hero-logo{width:min(90%,300px);max-height:120px}.tab{padding:8px 19px}
+.music{left:12px;bottom:12px}.bottom-admin{right:12px;bottom:12px}
+}
+@media(prefers-reduced-motion:reduce){.snow{animation:none}}
+</style>
+</head>
+<body>
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-image" id="bgImage"></div>
+  <div class="bg-overlay"></div>
+  <div class="bg-vignette"></div>
+</div>
+<div class="snow"></div>
+
+<button class="request-entry clickable" onclick="openRequest()">ส่งคำขอเข้า<span class="request-badge" id="requestCount">0</span></button>
+<main class="wrap">
+<header class="top"><div><div class="logo">DARADIFF</div><div class="tag">WINTER IS COMING</div></div></header>
+<section class="hero" id="heroBox"><img id="heroLogo" class="hero-logo" alt="DARADIFF Logo"><h1 class="hero-title"></h1><p class="hero-subtitle"></p></section>
+<nav class="tabs"><button class="tab active" id="homeTab" onclick="showPage('home')">⌂ HOME</button><button class="tab" id="memberTab" onclick="showPage('members')"><svg class="members-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm6-1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM9 13c-3.31 0-6 1.69-6 3.75V19h12v-2.25C15 14.69 12.31 13 9 13Zm6 0c-.36 0-.75.03-1.15.09 1.22.67 2.15 1.6 2.55 2.73.06.18.1.4.1.68V19h5v-2c0-2.21-3.03-4-6.5-4Z"/></svg><span>MEMBERS</span></button></nav>
+<section id="homePage">
+<div class="home-section" id="leadershipSection"><div class="sup-title">FOUNDER / LEADER</div><div class="grid" id="leadershipGrid"></div></div>
+<div class="home-section" id="supSection"><div class="sup-title">SUP</div><div class="grid" id="supGrid"></div></div>
+<div class="home-section" id="contactSection"><div class="sup-title">ช่องทางติดต่อเข้าตระกูล</div><div class="contact-grid" id="contactGrid"></div></div>
+</section>
+<section id="membersPage" style="display:none"><div class="grid" id="memberGrid"></div></section>
+</main>
+
+<div class="music"><button class="play" id="playBtn" onclick="toggleMusic()">▶</button><div><small>◉ Catbox Music</small><input class="range" id="vol" type="range" min="0" max="1" step=".01" value=".7"></div></div>
+<button class="bottom-admin" onclick="openAdmin()">♟ ADMIN PANEL</button>
+<audio id="audio" loop preload="none"></audio>
+<div id="youtubePlayer" style="position:fixed;width:1px;height:1px;left:-10px;bottom:-10px;opacity:0;pointer-events:none;overflow:hidden"></div>
+
+<div class="modal" id="requestModal"><div class="panel" style="max-width:420px"><button class="close" onclick="closeRequest()">×</button><h2>ส่งคำขอเข้าตระกูล</h2><input class="input" id="reqName" placeholder="ชื่อสมาชิก (เช่น KNXSTYLE)"><input class="input" id="reqFb" placeholder="ลิงก์ Facebook (https://facebook.com/...)"><div class="request-note">เลือกยศที่ต้องการสมัคร ระบบจะส่งคำขอให้แอดมินตรวจสอบก่อน ยังไม่เพิ่มชื่อเข้าหน้าเว็บจนกว่าแอดมินจะกดยืนยัน</div><div class="role-picks" id="requestRoles"><button type="button" class="role-pick" data-role="Founder" onclick="chooseRequestRole('Founder')">Founder</button><button type="button" class="role-pick" data-role="Leader" onclick="chooseRequestRole('Leader')">Leader</button><button type="button" class="role-pick" data-role="SUP" onclick="chooseRequestRole('SUP')">SUP</button><button type="button" class="role-pick" data-role="Member" onclick="chooseRequestRole('Member')">Member</button></div><button type="button" class="btn primary" onclick="submitRequest()">➤ ส่งคำขอให้แอดมิน</button></div></div>
+
+<div class="modal" id="loginModal"><div class="panel" style="max-width:360px"><button class="close" onclick="closeModals()">×</button><h2>เข้าสู่ระบบ Admin</h2><input class="input" id="password" type="password" placeholder="กรอกรหัสผ่าน admin..."><button class="btn primary" onclick="login()">ยืนยัน</button></div></div>
+
+<div class="modal" id="adminModal"><div class="panel"><button class="close" onclick="closeModals()">×</button><h2>⚙ จัดการเว็บไซต์</h2>
+<div class="filebox"><label style="font-size:11px;color:#aaa">คำขอเข้าตระกูล</label><div class="hint">กดยืนยันแล้วระบบจะย้ายชื่อไปยัง Founder/Leader, SUP หรือ Members ตามยศที่เลือก</div><div class="list" id="requestAdminList"></div></div>
+
+<label style="font-size:11px;color:#aaa">โลโก้หน้าเว็บ</label>
+<div class="filebox">
+<input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" onchange="previewLogo(event)">
+<img id="logoPreview" class="preview" alt="">
+<button class="btn primary" onclick="saveLogo()">▣ ใช้โลโก้นี้</button>
+<button class="btn reset" onclick="resetLogo()">↺ ใช้ข้อความเดิม</button>
+<div class="hint">เลือกโลโก้ใหม่จากเครื่องได้ตลอด ระบบจะ resize ให้ไม่เกิน 1200px และบีบอัดเป็น WebP เพื่อให้โหลดเร็วขึ้น</div>
+</div>
+
+<label style="font-size:11px;color:#aaa">พื้นหลังเว็บไซต์</label>
+<div class="filebox">
+<input id="bgFile" type="file" accept="image/*" onchange="previewBackground(event)">
+<img id="bgPreview" class="preview" alt="">
+<button class="btn primary" onclick="saveBackground()">▣ ใช้รูปนี้เป็นพื้นหลัง</button>
+<button class="btn reset" onclick="resetBackground()">↺ ใช้พื้นหลังเริ่มต้น</button>
+<div class="hint">ระบบจะ resize รูปให้ไม่เกิน 1920px และบีบอัดเป็น WebP ก่อนเก็บไว้ในเครื่อง เพื่อลดขนาดไฟล์และโหลดเร็วขึ้น</div>
+</div>
+
+<div class="settings-grid">
+<div class="setting"><label>ความมืดพื้นหลัง <span id="darkVal">68%</span></label><input id="darkRange" type="range" min="0" max="90" value="68"></div>
+<div class="setting"><label>เบลอพื้นหลัง <span id="blurVal">0px</span></label><input id="blurRange" type="range" min="0" max="8" value="0"></div>
+<div class="setting"><label>ตำแหน่งแนวนอน</label><select id="posX"><option value="center">กลาง</option><option value="left">ซ้าย</option><option value="right">ขวา</option></select></div>
+<div class="setting"><label>ตำแหน่งแนวตั้ง</label><select id="posY"><option value="center">กลาง</option><option value="top">บน</option><option value="bottom">ล่าง</option></select></div>
+</div>
+<button class="btn primary" onclick="saveBgSettings()">▣ บันทึกการตั้งค่าพื้นหลัง</button>
+
+<hr style="border:0;border-top:1px solid #ffffff12;margin:18px 0">
+<label style="font-size:11px;color:#aaa">เพลงประกอบ (Catbox Link)</label>
+<input class="input" id="musicUrl" placeholder="วางลิงก์ MP3 หรือ YouTube เช่น https://youtu.be/..."><button class="btn primary" onclick="saveMusic()">▣ อัปเดตลิงก์เพลง</button><div class="hint">รองรับลิงก์ MP3 โดยตรง และลิงก์ YouTube ระบบจะเล่นจาก YouTube โดยไม่ต้องแปลงเป็น MP3</div>
+<hr style="border:0;border-top:1px solid #ffffff12;margin:18px 0">
+<label style="font-size:11px;color:#aaa">จัดการ Founder / Leader</label>
+<input class="input" id="lName" placeholder="ชื่อ Founder / Leader">
+<div class="row"><input class="input" id="lRole" placeholder="ตำแหน่ง (Founder / Leader)"><input class="input" id="lFb" placeholder="ลิงก์ Facebook"></div>
+<button class="btn primary" onclick="addLeader()">＋ เพิ่ม Founder / Leader</button>
+<div class="list" id="leaderAdminList"></div>
+
+<hr style="border:0;border-top:1px solid #ffffff12;margin:18px 0">
+<label style="font-size:11px;color:#aaa">ช่องทางติดต่อเข้าตระกูล</label>
+<div class="row"><input class="input" id="contactName" placeholder="ชื่อช่องทาง (เช่น Facebook / Discord)"><input class="input" id="contactUrl" placeholder="ลิงก์เข้าติดต่อ"></div>
+<select class="input" id="contactPos"><option value="center">ตำแหน่ง: กลาง</option><option value="left">ตำแหน่ง: ซ้าย</option><option value="right">ตำแหน่ง: ขวา</option></select>
+<button class="btn primary" onclick="addContact()">＋ เพิ่มช่องทางติดต่อ</button>
+<div class="list" id="contactAdminList"></div>
+
+<hr style="border:0;border-top:1px solid #ffffff12;margin:18px 0">
+<label style="font-size:11px;color:#aaa">จัดการข้อมูลสมาชิก</label>
+<input class="input" id="mName" placeholder="ชื่อสมาชิก (เช่น NKNXSTYLE)">
+<div class="row"><input class="input" id="mRole" placeholder="ตำแหน่ง (Founder / Leader / Member)"><input class="input" id="mFb" placeholder="ลิงก์ Facebook"></div>
+<button class="btn primary" onclick="addMember()">＋ เพิ่มรายชื่อสมาชิก</button>
+<div class="list" id="adminList"></div>
+
+<hr style="border:0;border-top:1px solid #ffffff12;margin:18px 0">
+<label style="font-size:11px;color:#aaa">จัดการข้อมูล SUP</label>
+<input class="input" id="supName" placeholder="ชื่อ SUP">
+<div class="row"><input class="input" id="supRole" placeholder="ตำแหน่ง (Sup)"><input class="input" id="supFb" placeholder="ลิงก์ Facebook"></div>
+<button class="btn primary" onclick="addSup()">＋ เพิ่ม SUP</button>
+<div class="list" id="supAdminList"></div>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+let ytFrame=null, ytVideoId='', ytPlaying=false;
+
+function getYouTubeId(url){
+  const s=String(url||'').trim();
+  const m=s.match(/(?:youtube\.com\/(?:watch\?[^#\s]*v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})(?:[?&#\s]|$)/i);
+  return m?m[1]:'';
+}
+function isYouTubeUrl(url){return !!getYouTubeId(url)}
+
+function youtubeEmbedUrl(id){
+  return 'https://www.youtube.com/embed/'+encodeURIComponent(id)
+    +'?autoplay=1&playsinline=1&controls=0&rel=0&loop=1&playlist='+encodeURIComponent(id);
+}
+
+function ensureYouTubeFrame(id){
+  const box=document.getElementById('youtubePlayer');
+  if(!box)return;
+  box.innerHTML='';
+  ytFrame=document.createElement('iframe');
+  ytFrame.title='YouTube Music';
+  ytFrame.src=youtubeEmbedUrl(id);
+  ytFrame.allow='autoplay; encrypted-media; picture-in-picture';
+  ytFrame.setAttribute('allowfullscreen','');
+  ytFrame.style.cssText='position:fixed;width:1px;height:1px;left:0;bottom:0;border:0;opacity:.01;pointer-events:none;';
+  box.appendChild(ytFrame);
+  ytVideoId=id;
+  ytPlaying=true;
+}
+
+function stopYouTube(){
+  const box=document.getElementById('youtubePlayer');
+  if(box)box.innerHTML='';
+  ytFrame=null;
+  ytVideoId='';
+  ytPlaying=false;
+}
+
+function loadMusicSource(url){
+  const id=getYouTubeId(url);
+  if(id){
+    audio.pause();
+    audio.removeAttribute('src');
+    stopYouTube();
+    ytVideoId=id;
+    return 'youtube';
+  }
+  stopYouTube();
+  setAudio();
+  return 'audio';
+}
+
+const KEY='daradiff_members_v1', MUSIC='daradiff_music_v1', BG='daradiff_background_v3', BGS='daradiff_bg_settings_v3', LOGO='daradiff_logo_v1';
+const SUP='daradiff_sup_v2';
+const LEAD='daradiff_leadership_v1', CONTACT='daradiff_contact_v1';
+const REQUESTS='daradiff_join_requests_v1';
+const SUPABASE_URL='https://nxgffdznlvdvpliuyygg.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable__4nUfNETl2wGJLs4pbyTBA_tAo661Yt';
+const db=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
+let onlineRequests=[];
+let onlinePeople=[];
+let selectedRequestRole='Member';
+const defaultSup=[];
+const defaultLeadership=[];
+const defaultContacts=[];
+const defaultMembers=[
+{name:'Sakura Salaya',role:'Founders',fb:'#'},{name:'Miren Daradiff',role:'Founders',fb:'#'},
+{name:'Noxgzane Sixeighteighstyle',role:'Leader',fb:'#'},{name:'Biglex Daradiff',role:'Member',fb:'#'},
+{name:'Damon Daradiff',role:'Member',fb:'#'},{name:'Mywhite',role:'Member',fb:'#'},
+{name:'Nichel Daradiff',role:'Member',fb:'#'},{name:'Nina Gardenuzzie',role:'Member',fb:'#'},
+{name:'Onisuka Daradiff',role:'Member',fb:'#'}];
+
+const DEFAULT_BG='linear-gradient(135deg,#20242d,#08090b 70%)';
+
+function localMembers(){return JSON.parse(localStorage.getItem(KEY)||'null')||defaultMembers}
+function localSups(){return JSON.parse(localStorage.getItem(SUP)||'null')||defaultSup}
+function localLeaders(){return JSON.parse(localStorage.getItem(LEAD)||'null')||defaultLeadership}
+function members(){return db?onlinePeople.filter(x=>x.section==='member'):localMembers()}
+function sups(){return db?onlinePeople.filter(x=>x.section==='sup'):localSups()}
+function leaders(){return db?onlinePeople.filter(x=>x.section==='leadership'):localLeaders()}
+function contacts(){return JSON.parse(localStorage.getItem(CONTACT)||'null')||defaultContacts}
+function requests(){return db?onlineRequests:(onlineRequests.length?onlineRequests:JSON.parse(localStorage.getItem(REQUESTS)||'null')||[])}
+async function migrateLocalPeople(){
+  if(!db||localStorage.getItem('daradiff_people_seed_v2'))return;
+  const {data:existing,error}=await db.from('people').select('id,name,fb,section').limit(1);
+  if(error||existing?.length){localStorage.setItem('daradiff_people_seed_v2','1');return}
+  const rows=[
+    ...localMembers().map(x=>({name:x.name,role:x.role||'Member',fb:x.fb||'#',section:'member'})),
+    ...localSups().map(x=>({name:x.name,role:x.role||'Sup',fb:x.fb||'#',section:'sup'})),
+    ...localLeaders().map(x=>({name:x.name,role:x.role||'Founder / Leader',fb:x.fb||'#',section:'leadership'}))
+  ];
+  if(rows.length){const {error:ins}=await db.from('people').insert(rows);if(ins)console.warn('People seed failed:',ins.message);}
+  localStorage.setItem('daradiff_people_seed_v2','1');
+}
+function subscribeRealtime(){
+  if(!db||window.__daradiffRealtime)return;
+  window.__daradiffRealtime=db.channel('daradiff-online')
+    .on('postgres_changes',{event:'*',schema:'public',table:'people'},payload=>{
+      if(payload.eventType==='DELETE') onlinePeople=onlinePeople.filter(p=>String(p.id)!==String(payload.old.id));
+      else if(payload.eventType==='INSERT') { if(!onlinePeople.some(p=>String(p.id)===String(payload.new.id))) onlinePeople.push(payload.new); }
+      else if(payload.eventType==='UPDATE') { const i=onlinePeople.findIndex(p=>String(p.id)===String(payload.new.id)); if(i>=0) onlinePeople[i]=payload.new; else onlinePeople.push(payload.new); }
+      render();
+    })
+    .on('postgres_changes',{event:'*',schema:'public',table:'join_requests'},payload=>{
+      if(payload.eventType==='DELETE') onlineRequests=onlineRequests.filter(r=>String(r.id)!==String(payload.old.id));
+      else if(payload.eventType==='INSERT') { if(payload.new.status==='pending'&&!onlineRequests.some(r=>String(r.id)===String(payload.new.id))) onlineRequests.push(payload.new); }
+      else if(payload.eventType==='UPDATE') { onlineRequests=onlineRequests.filter(r=>String(r.id)!==String(payload.new.id)); if(payload.new.status==='pending') onlineRequests.push(payload.new); }
+      render();
+    }).subscribe();
+}
+async function loadOnlineData(){
+  if(!db){render();return}
+  try{
+    await migrateLocalPeople();
+    const [{data:rq,error:rqErr},{data:pp,error:ppErr}]=await Promise.all([
+      db.from('join_requests').select('*').eq('status','pending').order('created_at',{ascending:true}),
+      db.from('people').select('*').order('created_at',{ascending:true})
+    ]);
+    if(!rqErr) onlineRequests=rq||[];
+    if(!ppErr) onlinePeople=pp||[];
+    subscribeRealtime();
+    // Migrate any old pending local requests once.
+    const migrated=localStorage.getItem('daradiff_requests_migrated_v1');
+    if(!migrated){
+      const local=JSON.parse(localStorage.getItem(REQUESTS)||'[]')||[];
+      if(local.length){
+        const rows=local.map(x=>({name:x.name,fb:x.fb||'#',role:x.role||'Member',status:'pending',created_at:x.createdAt||new Date().toISOString()}));
+        const {data}=await db.from('join_requests').insert(rows).select('*');
+        if(data) onlineRequests=[...onlineRequests,...data];
+      }
+      localStorage.setItem('daradiff_requests_migrated_v1','1');
+    }
+  }catch(e){console.warn('Supabase load failed:',e)}
+  render();
+}
+async function submitRequest(){
+  const name=reqName.value.trim(), fb=reqFb.value.trim();
+  if(!name)return alert('กรุณาใส่ชื่อสมาชิก');
+  if(fb && !/^https?:\/\//i.test(fb))return alert('ลิงก์ Facebook ต้องขึ้นต้นด้วย http:// หรือ https://');
+  const row={name,fb:fb||'#',role:selectedRequestRole,status:'pending'};
+  if(db){
+    const {data,error}=await db.from('join_requests').insert(row).select('*').single();
+    if(error)return alert('ส่งคำขอไม่สำเร็จ: '+error.message);
+    onlineRequests.push(data);
+  }else{
+    const x=JSON.parse(localStorage.getItem(REQUESTS)||'[]')||[];row.id=Date.now().toString(36)+Math.random().toString(36).slice(2,7);row.createdAt=new Date().toISOString();x.push(row);localStorage.setItem(REQUESTS,JSON.stringify(x));
+  }
+  reqName.value='';reqFb.value='';closeRequest();render();alert('ส่งคำขอเรียบร้อย รอแอดมินยืนยันครับ');
+}
+async function approveRequest(i){
+  const x=requests(),r=x[i];if(!r)return;
+  if(db){
+    const section=(r.role==='Founder'||r.role==='Leader')?'leadership':(r.role==='SUP'?'sup':'member');
+    const {data:person,error:pe}=await db.from('people').insert({name:r.name,role:r.role==='SUP'?'Sup':r.role,fb:r.fb||'#',section}).select('*').single();
+    if(pe)return alert('เพิ่มสมาชิกไม่สำเร็จ: '+pe.message);
+    const {error:de}=await db.from('join_requests').delete().eq('id',r.id);
+    if(de)return alert('เพิ่มแล้ว แต่ลบคำขอไม่สำเร็จ: '+de.message);
+    onlinePeople.push(person);onlineRequests=onlineRequests.filter(q=>q.id!==r.id);
+  }else{
+    if(r.role==='Founder'||r.role==='Leader'){let a=leaders();a.push({name:r.name,role:r.role,fb:r.fb});localStorage.setItem(LEAD,JSON.stringify(a));}
+    else if(r.role==='SUP'){let a=sups();a.push({name:r.name,role:'Sup',fb:r.fb});localStorage.setItem(SUP,JSON.stringify(a));}
+    else {let a=members();a.push({name:r.name,role:'Member',fb:r.fb});localStorage.setItem(KEY,JSON.stringify(a));}
+    x.splice(i,1);localStorage.setItem(REQUESTS,JSON.stringify(x));
+  }
+  render();alert('ยืนยันคำขอแล้ว');
+}
+async function rejectRequest(i){
+  if(!confirm('ปฏิเสธคำขอนี้ใช่ไหม?'))return;
+  const x=requests(),r=x[i];if(!r)return;
+  if(db){const {error}=await db.from('join_requests').delete().eq('id',r.id);if(error)return alert('ปฏิเสธไม่สำเร็จ: '+error.message);onlineRequests=onlineRequests.filter(q=>q.id!==r.id)}
+  else{x.splice(i,1);localStorage.setItem(REQUESTS,JSON.stringify(x))}
+  render();
+}
+
+async function savePersonEdits(section,id,patch){
+  if(!db||!id)return false;
+  const {data,error}=await db.from('people').update(patch).eq('id',id).select('*').single();
+  if(error){alert('บันทึกไม่สำเร็จ: '+error.message);return true}
+  const i=onlinePeople.findIndex(p=>String(p.id)===String(id)); if(i>=0) onlinePeople[i]=data; render(); return true;
+}
+function saveMembers(x){localStorage.setItem(KEY,JSON.stringify(x));render()}
+function saveLeaders(x){localStorage.setItem(LEAD,JSON.stringify(x));render()}
+function saveContacts(x){localStorage.setItem(CONTACT,JSON.stringify(x));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeUrl(s){return /^https?:\/\//i.test(s||'')?s:'#'}
+
+
+function mergedPeople(section,localList){
+  const online=onlinePeople.filter(x=>x.section===section).map(x=>({id:x.id,name:x.name,role:x.role,fb:x.fb}));
+  return [...localList,...online.filter(o=>!localList.some(a=>a.name===o.name&&a.fb===o.fb))];
+}
+
+function render(){
+  const m=mergedPeople('member',members()), s=mergedPeople('sup',sups()), l=mergedPeople('leadership',leaders()), c=contacts();
+  leadershipGrid.innerHTML=l.map(x=>`<article class="card"><div class="name">${esc(x.name)}</div><div class="role">${esc(x.role||'Founder / Leader')}</div>${safeUrl(x.fb)!=='#'?`<a class="fb" href="${safeUrl(x.fb)}" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.099 4.388 23.093 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.93-1.956 1.885v2.26h3.328l-.532 3.49h-2.796V24C19.612 23.093 24 18.099 24 12.073Z"/></svg></a>`:''}</article>`).join('');
+  supGrid.innerHTML=s.map(x=>`<article class="card"><div class="name">${esc(x.name)}</div><div class="role">${esc(x.role||'Sup')}</div>${safeUrl(x.fb)!=='#'?`<a class="fb" href="${safeUrl(x.fb)}" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.099 4.388 23.093 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.93-1.956 1.885v2.26h3.328l-.532 3.49h-2.796V24C19.612 23.093 24 18.099 24 12.073Z"/></svg></a>`:''}</article>`).join('');
+  contactGrid.innerHTML=c.map(x=>`<a class="contact-link contact-${x.pos||'center'} clickable" href="${safeUrl(x.url)}" target="_blank" rel="noopener">${esc(x.name)}</a>`).join('');
+  memberGrid.innerHTML=m.map(x=>`<article class="card"><div class="name">${esc(x.name)}</div><div class="role">${esc(x.role)}</div><a class="fb" href="${safeUrl(x.fb)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.099 4.388 23.093 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.93-1.956 1.885v2.26h3.328l-.532 3.49h-2.796V24C19.612 23.093 24 18.099 24 12.073Z"/></svg></a></article>`).join('');
+  adminList.innerHTML=m.map((x,i)=>`<div class="item"><div class="item-info"><b>${esc(x.name)}</b><span>${esc(x.role)}</span></div><button class="icon" onclick="move(${i},-1)">↑</button><button class="icon" onclick="move(${i},1)">↓</button><button class="icon" onclick="editMember(${i})">✎</button><button class="btn danger" style="padding:5px 9px" onclick="delMember(${i})">▣</button></div>`).join('');
+  leaderAdminList.innerHTML=l.map((x,i)=>`<div class="item"><div class="item-info"><b>${esc(x.name)}</b><span>${esc(x.role||'Founder / Leader')}</span></div><button class="icon" onclick="moveLeader(${i},-1)">↑</button><button class="icon" onclick="moveLeader(${i},1)">↓</button><button class="icon" onclick="editLeader(${i})">✎</button><button class="btn danger" style="padding:5px 9px" onclick="delLeader(${i})">▣</button></div>`).join('');
+  supAdminList.innerHTML=s.map((x,i)=>`<div class="item"><div class="item-info"><b>${esc(x.name)}</b><span>${esc(x.role||'Sup')}</span></div><button class="icon" onclick="moveSup(${i},-1)">↑</button><button class="icon" onclick="moveSup(${i},1)">↓</button><button class="icon" onclick="editSup(${i})">✎</button><button class="btn danger" style="padding:5px 9px" onclick="delSup(${i})">▣</button></div>`).join('');
+  contactAdminList.innerHTML=c.map((x,i)=>`<div class="item"><div class="item-info"><b>${esc(x.name)}</b><span>${esc(x.url)} · ${x.pos==='left'?'ซ้าย':x.pos==='right'?'ขวา':'กลาง'}</span></div><button class="icon" onclick="moveContact(${i},-1)">↑</button><button class="icon" onclick="moveContact(${i},1)">↓</button><button class="icon" onclick="editContact(${i})">✎</button><button class="btn danger" style="padding:5px 9px" onclick="delContact(${i})">▣</button></div>`).join('');
+  const rq=requests(); requestCount.textContent=rq.length; requestCount.style.display=rq.length?'inline-grid':'none'; requestAdminList.innerHTML=rq.length?rq.map((r,i)=>`<div class="item"><div class="item-info"><b>${esc(r.name)}</b><span>${esc(r.role)} · ${r.fb&&r.fb!=='#'?esc(r.fb):'ไม่มี Facebook'}</span></div><button class="btn approve" style="padding:6px 9px" onclick="approveRequest(${i})">✓</button><button class="btn danger" style="padding:6px 9px" onclick="rejectRequest(${i})">✕</button></div>`).join(''):'<div class="request-empty">ยังไม่มีคำขอที่รออนุมัติ</div>';
+  leadershipSection.style.display=l.length?'block':'none';
+  supSection.style.display=s.length?'block':'none';
+  contactSection.style.display=c.length?'block':'none';
+}
+function addClickEffects(){
+  document.addEventListener('click',function(e){
+    const el=e.target.closest('button,.fb,.tab');
+    if(!el)return;
+    el.classList.add('clickable');
+    const r=document.createElement('span');
+    r.className='ripple';
+    const rect=el.getBoundingClientRect();
+    const size=Math.max(rect.width,rect.height)*1.2;
+    r.style.width=r.style.height=size+'px';
+    r.style.left=(e.clientX-rect.left-size/2)+'px';
+    r.style.top=(e.clientY-rect.top-size/2)+'px';
+    el.appendChild(r);
+    setTimeout(()=>r.remove(),520);
+  });
+}
+
+function openRequest(){
+  const modal=document.getElementById('requestModal');
+  const nameInput=document.getElementById('reqName');
+  if(!modal)return;
+  modal.classList.add('show');
+  chooseRequestRole('Member');
+  setTimeout(()=>{if(nameInput)nameInput.focus()},80);
+}
+function closeRequest(){
+  const modal=document.getElementById('requestModal');
+  if(modal)modal.classList.remove('show');
+}
+function chooseRequestRole(role){
+  selectedRequestRole=['Founder','Leader','SUP','Member'].includes(role)?role:'Member';
+  document.querySelectorAll('#requestRoles .role-pick').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.role===selectedRequestRole);
+  });
+}
+function showPage(p){
+homePage.style.display=p==='home'?'block':'none';
+membersPage.style.display=p==='members'?'block':'none';
+homeTab.classList.toggle('active',p==='home');
+memberTab.classList.toggle('active',p==='members');
+}
+addClickEffects();
+function openAdmin(){loginModal.classList.add('show');password.focus()}
+function closeModals(){loginModal.classList.remove('show');adminModal.classList.remove('show');closeRequest()}
+function login(){
+if(password.value==='DARADIFF'){
+password.value='';loginModal.classList.remove('show');adminModal.classList.add('show');
+musicUrl.value=localStorage.getItem(MUSIC)||'';loadBgSettings();loadBgPreview();loadLogo();render();
+}else alert('รหัสผ่านไม่ถูกต้อง')
+}
+async function addMember(){
+  const n=mName.value.trim();if(!n)return alert('กรุณาใส่ชื่อสมาชิก');
+  const row={name:n,role:mRole.value.trim()||'Member',fb:mFb.value.trim()||'#',section:'member'};
+  if(db){const {data,error}=await db.from('people').insert(row).select('*').single();if(error)return alert('เพิ่มสมาชิกไม่สำเร็จ: '+error.message);onlinePeople.push(data);render();}
+  else{let m=localMembers();m.push({name:n,role:row.role,fb:row.fb});saveMembers(m)}
+  mName.value=mRole.value=mFb.value=''
+}
+async function addSup(){
+  const n=supName.value.trim();if(!n)return alert('กรุณาใส่ชื่อ SUP');
+  const row={name:n,role:supRole.value.trim()||'Sup',fb:supFb.value.trim()||'#',section:'sup'};
+  if(db){const {data,error}=await db.from('people').insert(row).select('*').single();if(error)return alert('เพิ่ม SUP ไม่สำเร็จ: '+error.message);onlinePeople.push(data);render();}
+  else{let s=localSups();s.push({name:n,role:row.role,fb:row.fb});localStorage.setItem(SUP,JSON.stringify(s));render()}
+  supName.value=supRole.value=supFb.value='';
+}
+function saveSups(x){localStorage.setItem(SUP,JSON.stringify(x));render()}
+async function delSup(i){
+  if(!confirm('ลบ SUP นี้ใช่ไหม?'))return;
+  const base=sups(), list=mergedPeople('sup',base), x=list[i];
+  if(await deleteOnlinePerson(x,' SUP'))return;
+  if(i<base.length){base.splice(i,1);saveSups(base)}
+}
+async function moveOnlinePerson(section,i,d){
+  const list=onlinePeople.filter(x=>x.section===section),j=i+d;if(j<0||j>=list.length)return;
+  const a=list[i],b=list[j];
+  const {error}=await db.from('people').update({created_at:b.created_at}).eq('id',a.id); if(error)return alert('จัดลำดับไม่สำเร็จ: '+error.message);
+  const {error:e2}=await db.from('people').update({created_at:a.created_at}).eq('id',b.id); if(e2)return alert('จัดลำดับไม่สำเร็จ: '+e2.message);
+  await loadOnlineData();
+}
+async function moveSup(i,d){if(db)return moveOnlinePerson('sup',i,d);let s=localSups(),j=i+d;if(j<0||j>=s.length)return;[s[i],s[j]]=[s[j],s[i]];saveSups(s)}
+async function editSup(i){
+  let s=sups(),x=s[i],n=prompt('ชื่อ SUP',x.name);if(n===null)return;
+  const role=prompt('ตำแหน่ง',x.role||'Sup')||x.role,fb=prompt('Facebook URL',x.fb||'#')||x.fb;
+  if(db){await savePersonEdits('sup',x.id,{name:n.trim()||x.name,role,fb});return}
+  x.name=n.trim()||x.name;x.role=role;x.fb=fb;saveSups(s)
+}
+async function addLeader(){
+  const n=lName.value.trim();if(!n)return alert('กรุณาใส่ชื่อ Founder / Leader');
+  const row={name:n,role:lRole.value.trim()||'Founder / Leader',fb:lFb.value.trim()||'#',section:'leadership'};
+  if(db){const {data,error}=await db.from('people').insert(row).select('*').single();if(error)return alert('เพิ่ม Founder / Leader ไม่สำเร็จ: '+error.message);onlinePeople.push(data);render();}
+  else{let x=localLeaders();x.push({name:n,role:row.role,fb:row.fb});saveLeaders(x)}
+  lName.value=lRole.value=lFb.value='';
+}
+async function delLeader(i){
+  if(!confirm('ลบ Founder / Leader นี้ใช่ไหม?'))return;
+  const base=leaders(), list=mergedPeople('leadership',base), person=list[i];
+  if(await deleteOnlinePerson(person,' Founder / Leader'))return;
+  if(i<base.length){base.splice(i,1);saveLeaders(base)}
+}
+async function moveLeader(i,d){if(db)return moveOnlinePerson('leadership',i,d);let x=localLeaders(),j=i+d;if(j<0||j>=x.length)return;[x[i],x[j]]=[x[j],x[i]];saveLeaders(x)}
+async function editLeader(i){
+  let x=leaders(),v=x[i],n=prompt('ชื่อ Founder / Leader',v.name);if(n===null)return;
+  const role=prompt('ตำแหน่ง',v.role||'Founder / Leader')||v.role,fb=prompt('Facebook URL',v.fb||'#')||v.fb;
+  if(db){await savePersonEdits('leadership',v.id,{name:n.trim()||v.name,role,fb});return}
+  v.name=n.trim()||v.name;v.role=role;v.fb=fb;saveLeaders(x)
+}
+function addContact(){
+  const n=contactName.value.trim(),u=contactUrl.value.trim();
+  if(!n||!/^https?:\/\//i.test(u))return alert('กรุณาใส่ชื่อช่องทางและลิงก์ http/https');
+  const x=contacts();x.push({name:n,url:u,pos:contactPos.value||'center'});saveContacts(x);contactName.value=contactUrl.value='';contactPos.value='center';
+}
+function delContact(i){if(confirm('ลบช่องทางติดต่อใช่ไหม?')){let x=contacts();x.splice(i,1);saveContacts(x)}}
+function moveContact(i,d){let x=contacts(),j=i+d;if(j<0||j>=x.length)return;[x[i],x[j]]=[x[j],x[i]];saveContacts(x)}
+function editContact(i){
+  let x=contacts(),v=x[i],n=prompt('ชื่อช่องทาง',v.name);if(n===null)return;
+  v.name=n.trim()||v.name;v.url=prompt('ลิงก์ช่องทาง',v.url)||v.url;v.pos=prompt('ตำแหน่ง: left / center / right',v.pos||'center')||v.pos||'center';if(!['left','center','right'].includes(v.pos))v.pos='center';saveContacts(x)
+}
+async function delMember(i){
+  if(!confirm('ลบสมาชิกนี้ใช่ไหม?'))return;
+  const base=members(), list=mergedPeople('member',base), person=list[i];
+  if(await deleteOnlinePerson(person,' สมาชิก'))return;
+  if(i<base.length){base.splice(i,1);saveMembers(base)}
+}
+async function move(i,d){if(db)return moveOnlinePerson('member',i,d);let m=localMembers(),j=i+d;if(j<0||j>=m.length)return;[m[i],m[j]]=[m[j],m[i]];saveMembers(m)}
+async function editMember(i){
+  let m=members(),x=m[i],n=prompt('ชื่อสมาชิก',x.name);if(n===null)return;
+  const role=prompt('ตำแหน่ง',x.role)||x.role,fb=prompt('Facebook URL',x.fb)||x.fb;
+  if(db){await savePersonEdits('member',x.id,{name:n.trim()||x.name,role,fb});return}
+  x.name=n.trim()||x.name;x.role=role;x.fb=fb;saveMembers(m)
+}
+function saveMusic(){
+  const url=musicUrl.value.trim();
+  localStorage.setItem(MUSIC,url);
+  loadMusicSource(url);
+  alert('บันทึกลิงก์เพลงแล้ว');
+}
+function setAudio(){
+  const url=localStorage.getItem(MUSIC)||'';
+  if(isYouTubeUrl(url)){
+    audio.pause();
+    audio.removeAttribute('src');
+    return;
+  }
+  audio.src=url;
+  audio.volume=+vol.value;
+}
+function toggleMusic(){
+  const url=localStorage.getItem(MUSIC)||'';
+  if(!url)return alert('กรุณาใส่ลิงก์เพลงใน Admin ก่อน');
+
+  const id=getYouTubeId(url);
+  if(id){
+    if(ytPlaying){
+      stopYouTube();
+      playBtn.textContent='▶';
+    }else{
+      ensureYouTubeFrame(id);
+      playBtn.textContent='Ⅱ';
+    }
+    return;
+  }
+
+  if(!audio.src)return alert('ลิงก์ MP3 ไม่ถูกต้อง');
+  if(audio.paused){
+    audio.play().then(()=>playBtn.textContent='Ⅱ').catch(()=>alert('เบราว์เซอร์บล็อกการเล่นอัตโนมัติ — แตะหน้าจอครั้งหนึ่งเพื่อเริ่มเพลง'));
+  }else{
+    audio.pause();
+    playBtn.textContent='▶';
+  }
+}
+
+async function tryAutoPlayMusic(){
+  const url=localStorage.getItem(MUSIC)||'';
+  if(!url)return;
+  const id=getYouTubeId(url);
+  if(id){
+    ensureYouTubeFrame(id);
+    playBtn.textContent='Ⅱ';
+    return;
+  }
+  setAudio();
+  if(!audio.src)return;
+  try{
+    await audio.play();
+    playBtn.textContent='Ⅱ';
+  }catch(e){
+    // Chrome/Android/Safari may block audible autoplay until the user interacts.
+    playBtn.textContent='▶';
+  }
+}
+
+function retryMusicAfterInteraction(){
+  const url=localStorage.getItem(MUSIC)||'';
+  if(!url)return;
+  if(getYouTubeId(url)){
+    if(!ytPlaying){
+      ensureYouTubeFrame(getYouTubeId(url));
+      playBtn.textContent='Ⅱ';
+    }
+  }else if(audio.paused && audio.src){
+    audio.play().then(()=>playBtn.textContent='Ⅱ').catch(()=>{});
+  }
+  document.removeEventListener('pointerdown',retryMusicAfterInteraction);
+  document.removeEventListener('touchstart',retryMusicAfterInteraction);
+}
+
+vol.oninput=()=>{
+  audio.volume=+vol.value;
+};
+
+window.addEventListener('load',()=>{
+  setTimeout(tryAutoPlayMusic,150);
+  document.addEventListener('pointerdown',retryMusicAfterInteraction,{once:true,passive:true});
+  document.addEventListener('touchstart',retryMusicAfterInteraction,{once:true,passive:true});
+});
+
+/* ===== HERO LOGO ===== */
+let pendingLogo='';
+
+function applyLogo(value){
+  if(value){
+    heroLogo.src=value;
+    heroBox.classList.add('logo-mode');
+  }else{
+    heroLogo.removeAttribute('src');
+    heroBox.classList.remove('logo-mode');
+  }
+}
+
+function compressLogo(file){
+  return new Promise((resolve,reject)=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const max=1200;
+        const scale=Math.min(1,max/img.naturalWidth,max/img.naturalHeight);
+        const w=Math.max(1,Math.round(img.naturalWidth*scale));
+        const h=Math.max(1,Math.round(img.naturalHeight*scale));
+        const c=document.createElement('canvas');
+        c.width=w;c.height=h;
+        const ctx=c.getContext('2d');
+        ctx.clearRect(0,0,w,h);
+        ctx.drawImage(img,0,0,w,h);
+        resolve(c.toDataURL('image/webp',.86));
+      };
+      img.onerror=reject;
+      img.src=r.result;
+    };
+    r.onerror=reject;
+    r.readAsDataURL(file);
+  });
+}
+
+async function previewLogo(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  if(!file.type.startsWith('image/'))return alert('กรุณาเลือกไฟล์รูปภาพ');
+  try{
+    pendingLogo=await compressLogo(file);
+    logoPreview.src=pendingLogo;
+    logoPreview.style.display='block';
+    applyLogo(pendingLogo);
+  }catch(err){
+    alert('ไม่สามารถอ่านโลโก้นี้ได้');
+  }
+}
+
+function saveLogo(){
+  if(!pendingLogo)return alert('กรุณาเลือกรูปโลโก้ก่อน');
+  try{
+    localStorage.setItem(LOGO,pendingLogo);
+    applyLogo(pendingLogo);
+    alert('เปลี่ยนโลโก้เรียบร้อยแล้ว');
+  }catch(e){
+    alert('พื้นที่จัดเก็บของเบราว์เซอร์ไม่พอ กรุณาใช้รูปโลโก้ที่เล็กลง');
+  }
+}
+
+function loadLogo(){
+  const s=localStorage.getItem(LOGO);
+  if(s){
+    pendingLogo=s;
+    logoPreview.src=s;
+    logoPreview.style.display='block';
+    applyLogo(s);
+  }else{
+    applyLogo('');
+  }
+}
+
+function resetLogo(){
+  localStorage.removeItem(LOGO);
+  pendingLogo='';
+  logoFile.value='';
+  logoPreview.style.display='none';
+  applyLogo('');
+  alert('กลับมาใช้ข้อความเดิมแล้ว');
+}
+
+/* ===== IMAGE RESIZE / COMPRESS ===== */
+let pendingBg='';
+
+function compressImage(file){
+return new Promise((resolve,reject)=>{
+const r=new FileReader();
+r.onload=()=>{
+const img=new Image();
+img.onload=()=>{
+const maxW=1920,maxH=1920;
+const scale=Math.min(1,maxW/img.naturalWidth,maxH/img.naturalHeight);
+const w=Math.max(1,Math.round(img.naturalWidth*scale));
+const h=Math.max(1,Math.round(img.naturalHeight*scale));
+const c=document.createElement('canvas');
+c.width=w;c.height=h;
+const ctx=c.getContext('2d',{alpha:false});
+ctx.drawImage(img,0,0,w,h);
+resolve(c.toDataURL('image/webp',.78));
+};
+img.onerror=reject;
+img.src=r.result;
+};
+r.onerror=reject;
+r.readAsDataURL(file);
+});
+}
+
+async function previewBackground(e){
+const file=e.target.files[0];
+if(!file)return;
+if(!file.type.startsWith('image/'))return alert('กรุณาเลือกรูปภาพ');
+try{
+pendingBg=await compressImage(file);
+bgPreview.src=pendingBg;
+bgPreview.style.display='block';
+applyBackground(pendingBg);
+}catch(err){alert('ไม่สามารถอ่านรูปนี้ได้')}
+}
+
+function applyBackground(value){
+document.documentElement.style.setProperty('--bg-image',value?`url("${value}")`:DEFAULT_BG);
+}
+
+function saveBackground(){
+if(!pendingBg)return alert('กรุณาเลือกรูปก่อน');
+try{
+localStorage.setItem(BG,pendingBg);
+applyBackground(pendingBg);
+alert('เปลี่ยนพื้นหลังเรียบร้อยแล้ว');
+}catch(e){
+alert('พื้นที่จัดเก็บของเบราว์เซอร์ไม่พอ กรุณาเลือกรูปที่เล็กลง');
+}
+}
+
+function loadBgPreview(){
+const s=localStorage.getItem(BG);
+if(s){
+pendingBg=s;
+bgPreview.src=s;
+bgPreview.style.display='block';
+}
+}
+
+function resetBackground(){
+localStorage.removeItem(BG);
+pendingBg='';
+bgFile.value='';
+bgPreview.style.display='none';
+applyBackground('');
+alert('คืนค่าพื้นหลังเริ่มต้นแล้ว');
+}
+
+/* ===== BACKGROUND SETTINGS ===== */
+function saveBgSettings(){
+const s={
+dark:+darkRange.value,
+blur:+blurRange.value,
+posX:posX.value,
+posY:posY.value
+};
+localStorage.setItem(BGS,JSON.stringify(s));
+applyBgSettings(s);
+alert('บันทึกการตั้งค่าพื้นหลังแล้ว');
+}
+
+function applyBgSettings(s){
+const dark=Math.max(0,Math.min(90,+s.dark||0))/100;
+document.documentElement.style.setProperty('--dark-top',dark.toFixed(2));
+document.documentElement.style.setProperty('--dark-bottom',Math.min(.96,dark+.16).toFixed(2));
+document.documentElement.style.setProperty('--bg-blur',(Math.max(0,+s.blur||0))+'px');
+document.documentElement.style.setProperty('--bg-position',(s.posX||'center')+' '+(s.posY||'center'));
+}
+
+function loadBgSettings(){
+const s=JSON.parse(localStorage.getItem(BGS)||'null')||{
+dark:68,blur:0,posX:'center',posY:'center'
+};
+darkRange.value=s.dark;
+blurRange.value=s.blur;
+posX.value=s.posX;
+posY.value=s.posY;
+darkVal.textContent=s.dark+'%';
+blurVal.textContent=s.blur+'px';
+applyBgSettings(s);
+}
+darkRange.oninput=()=>darkVal.textContent=darkRange.value+'%';
+blurRange.oninput=()=>blurVal.textContent=blurRange.value+'px';
+
+/* ===== STARTUP ===== */
+window.scrollTo(0,0);
+
+applyBackground(localStorage.getItem(BG)||'');
+loadBgSettings();
+loadLogo();
+loadMusicSource(localStorage.getItem(MUSIC)||'');
+render();
+loadOnlineData();
+</script>
+</body>
+</html>
